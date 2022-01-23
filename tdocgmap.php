@@ -274,7 +274,7 @@ function getmyauth($apikey) {
 
 /**
     echo '<script';
-    echo 'src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWjFdr_C6CBFcvUnhO7btjto1DiRxELMo&amp;callback=initMaps">';
+    echo 'src="https://maps.googleapis.com/maps/api/js?key=&amp;callback=initMaps">';
     echo '</script>'; 
 **/
 ?> 
