@@ -46,11 +46,12 @@ This is the markdown todo file for project tdoc.
 
 Tasks related to new content.
 
-- [ ] Add version in the xml 
+- [ ] Add version# in the xml to render in the plugin desc.
   - [ ] add an optional marker and info window?
+  - [ ] add a default kml file so the plugin doesn't fail
 
 ## Release
-
+- [ ] contact the original devloper.
 - [x] Init project repository
       https://github.com/grantiago/tdocgmap
 - [x] Publish project on GitHub @grantiago
