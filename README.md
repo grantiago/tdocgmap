@@ -1,15 +1,17 @@
-# tdocgmap
-This is a fork of the tdocgmap plugin from the JED. This version 4.1.3
+# tDocGmap
+This is a fork of the tdocgmap plugin from the JED. Version 4.1.3
 
-Project page: [tdocplus](http://tdocplus.co.uk/0a_Empty400/kml-map)
+Original Project page: [tdocplus](http://tdocplus.co.uk/0a_Empty400/kml-map)
 
-A well documented and simple plugin. I was working on to developing one of my own when I stumbled upon this. Trust me I didn't find it with the abysmal JED search engine. 
+A one script plugin for rendering KML in Joomla content using the google maps API. I was working on, trying to develop one of my own when I stumbled upon this. Trust me I didn't find it with the abysmal JED search engine. 
 
-In addition to rendering a kml based map, I wanted to toggle off, or on, the google POIs. One asthetically, google maps is a clutter of POIs.Two, imagine I have a competetor across the street. I don't want to be featuring him on my website. I have a good grasp of the google maps api so I opened the tdocgmaps.php file to add a styler and toggle the POIs off. A couple pastes of code and done. Once I opened the file I discovered the original developer had commented and explained every function and loop. 
+In addition to rendering a kml based map, I wanted to toggle off, or on, the google POIs. Well at first I simply wanted to toggle them _off._ One for asthetics, google maps is a clutter of POIs. Two, imagine I have a competetor across the street. I don't want to be featuring my competitors on my website. 
+
+I have a solid grasp of the google maps API. I opened the tdocgmaps.php file to add a styler and shut down the POIs . A couple pastes of code and done. But wait a minute. Once I opened the file I discovered the original developer had commented and explained every function and loop. 
 
 It took me most of a day to work through the changes. I'm a one-line cut-and-paste hack. I struggled for a while to get the php params wrapped in quotes once they were transfered into the gmaps javascript. Stackoverflow and json_encode() did the trick. 
 
-I am offering these mods to the original developer.  I hope my efforts and added features are appreciated. I feel as if I am trespassing a bit. Oh well.
+I am offering these mods to the original developer and you.  I hope my efforts and added features are appreciated. I feel as if I am trespassing a bit. Oh well.
 
 _usage_ `{tdocgmap width=700 height=700 kml='https://adomain.com/kml/my.kml'}`
 
