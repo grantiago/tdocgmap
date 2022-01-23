@@ -1,32 +1,37 @@
 # tdocgmap
-Useful  plugin that embeds kml files on a google map in joomla articles or categories.
+This is a fork of the tdocgmap plugin from the JED
+A well documented and simple plugin. I was working on to developing one of my own when I stumbled upon this. 
+In addition to rendering a kml based map, I needed to be able to toggle off the google POIs. One asthetically and two, imagine if I have a competetor across the street. I don't want to be featuring him on my website. 
 
-_usage_  `{tdocgmap width=700 height=700 kml='https://adomain.com/kml/my.kml'}`
+_usage_ `{tdocgmap width=700 height=700 kml='https://adomain.com/kml/my.kml'}`
 
-source: [tdocplus](http://tdocplus.co.uk/0a_Empty400/kml-map)
+Specific settings are within the tag:
+- Position [left, right, none]
+- Height
+- Width
+- URL to the KML file [required] within single 'quotes'.
+- All settings are in the form key=value pairs separated by a space.
 
-will render multiple maps on one page. 
+- Auto zoom and center the map on the bounds of the kml layer.
+- Toggle POIs
+- Selectable base map
+- Supports multiple maps on one page.
+- Supports maps in categories.
 
-- Added en-GB language files for ease of formating text strings on admin page. 
-- Translated  to spanish -- for Chiris. 
-- Added a second tab group of options I would like to intigrage. 
-- I can get the off on variable in the initmap script but it is in the wrong order. and has no effect.
-- Removed the google maps api key in the leftover debugging. 
+The following position options are available when calling the map.
+- print - makes the map 100% in width and 700px in height and overrides other settings.
+- left - puts the map to the left and wraps text to the right with 15px margin
+- right - puts the map to the right and wraps text to the left with 15px margin.
+- if none of these options are used, the map is centered with no wrapping of text.
+
+[Get a free google maps api key.](https://developers.google.com/maps/documentation/maps-static/get-api-key)
+
+Project page: [tdocplus](http://tdocplus.co.uk/0a_Empty400/kml-map)
+
 
 additions:
-- added poi params in xml
-- basemap in the xml
+- Added en-GB language files for ease of formating text strings on admin page. 
+- Translated to spanish es-ES -- for Chiris. 
+- Added poi and basemap radio buttons . 
+- Removed the google maps api key in the leftover debugging. 
 
-php
-
-    $poi  = $this->params->get('poi' ,'');
-    $basemap  = $this->params->get('basemap' ,'');
-	
-I can add the poi styler value to 
-    
-    $mydata[$counter] = getmydata($counter, $gotdata[0], $poi) ; // kml
-	
-    result:
-	
-    Array ( [0] => var map0;var vis0=off;var src0='https://lrio.com/kml/hunt.kml'; 
-    [1] => var map1;var vis1=off;var src1='https://lrio.com/kml/lax_denpasar.kml'; )

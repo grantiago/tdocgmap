@@ -53,7 +53,7 @@ class plgcontenttdocgmap extends JPlugin {
 /*======added ga ==========*/
 		$poi  = $this->params->get('poi' ,'');
 		$basemap  = $this->params->get('basemap' ,'');
-		
+		//$poi = 'on'; //testing
         //echo "<br>Step One - Default Settings: ".$apikey .", ". $height .", ". $width ; 
 		
 		// step two locate number of instances of {tdocgmap}
@@ -74,8 +74,6 @@ class plgcontenttdocgmap extends JPlugin {
             $mydivs = array() ;   // used to replace occurrences in text
             $mydata = array() ;   // used to construct map script before init function
             $mymaps = array() ;   // used to construct map script within init function
-/*=========added ga ======*/
-            $mystyle = array() ;   // used to construct poi style 
 
             foreach ($occurrences[0] as $value) {
                 // create array for each data, create map and add to mymap
@@ -90,7 +88,7 @@ class plgcontenttdocgmap extends JPlugin {
                 foreach ($arr as $phrase) {
                     if (strstr(strtolower($phrase), 'kml=')) {
                         $tpm = explode('=', $phrase);
-                        $gotdata[0]=$tpm[1];                    
+                        $gotdata[0]=$tpm[1];						
                     }
                     if (strstr(strtolower($phrase), 'height=')) {
                         $tpm = explode('=', $phrase);
@@ -118,20 +116,21 @@ class plgcontenttdocgmap extends JPlugin {
 
                 // three things for each in the body: div with style, map data, and creator for script 
                 // create divs // 4.1.0
-                $mydivs[$counter] = getmydiv($counter, $gotdata[1], $gotdata[2], $gotdata[3]) ;   // mapno, height, width, ifprint
+                
+				$mydivs[$counter] = getmydiv($counter, $gotdata[1], $gotdata[2], $gotdata[3]) ;   // mapno, height, width, ifprint
                 // create data  
-                $mydata[$counter] = getmydata($counter, $gotdata[0]) ; // kml 
-				$mystyle[$counter] = getmystyle($counter, $gotdata[0]) ; // kml
+				/*=====added poi & basemap var ga see function line 215===========*/
+               echo $mydata[$counter] = getmydata($counter, $poi, $basemap, $gotdata[0]) ; // map#, poi, kml 
+				
+				 // echo getpbkml($counter, $poi, $basemap, $gotdata[0]);
                 // create maps  
                 $mymaps[$counter] = getmymap($counter) ;                            
-/*=====added ga ===========*/
-				// poi var here
-				$mystyle[$counter] = getmystyle($counter, $gotdata[0]) ;  
+
                 $counter = $counter + 1 ;             
             }  // end for each occurrence
 // var_dump($poi);
 //getmystyle($poi);
- print_r($mydata); // Array ( [0] => var map0;var src0='https://lrio.com/kml/hunt.kml'; [1] => var map1;var src1='https://lrio.com/kml/hunt.kml'; )
+ //print_r($mydata); // Array ( [0] => var map0;var src0='https://lrio.com/kml/hunt.kml'; [1] => var map1;var src1='https://lrio.com/kml/hunt.kml'; )
 			// Replace tag occurences with divs. 
             for ($i = 0; $i < count($mydivs); $i++) {
                 $article->text = preg_replace($regex, $mydivs[$i], $article->text, 1);
@@ -154,11 +153,8 @@ class plgcontenttdocgmap extends JPlugin {
                 // add map
                 $mapscript .= $mymaps[$i];         
             }   // end each map
-/* ========= added ga =====*/
-			for ($i = 0; $i < count($mystyle); $i++) {  
-                // add style
-                $mapscript .= $mystyle[$i];         
-            }   // end each style
+
+			
             // script end
             $mapscript .='}</script>' ;
 //var_dump($mapscript);
@@ -209,16 +205,37 @@ echo '<div id="Map1" style="width: 500px; height: 500px;">1</div>';
 **/ 
 
 // define the var to hold a map, and the kml file to show. goes in the map script before init function. 
-function getmydata($i, $kml) {
+function getmydata($i, $poi, $basemap, $kml) {
      $output  = 'var map'.$i.';';
-  // echo($output .= 'var src'.$i.'='.$kml.';');
+     $output .= 'var vis'.$i.'='.json_encode($poi).';'; // json_ puts quotes around the values!!!!
+     $output .= 'var basemap'.$i.'='.json_encode($basemap).';';
      $output .= 'var src'.$i.'='.$kml.';';
      return $output ;
 }
-function getmystyle($i, $poi) {
+//test function 
+function getpbkml($i, $poi, $basemap, $kml) {
      $output  = 'var map'.$i.';';
-   $output .= 'var vis'.$i.'='.$poi.';';
-  // $output .= 'onOff'.$i.'='.$poi.';';
+     $output .= 'var vis'.$i.'='.json_encode($poi).';';
+     $output .= 'var basemap'.$i.'='.json_encode($basemap).';';
+     $output .= 'var src'.$i.'='.$kml.';';
+     return $output ;
+}
+//this one too
+function getstyle($i, $poi, $kml) {
+    $output  = 'var map'.$i.';';
+    $output  .= 'var mapOptions'.$i.'=
+                {
+                     zoom: 14,
+                     center: weiser,
+                     mapTypeId: "terrain",
+                       styles: [{
+						featureType: "poi.business",
+						elementType: "labels",
+						stylers: [{ visibility:'.json_encode($poi).',}]
+					   }],
+                }';
+				// echo($output .= 'var src'.$i.'='.$kml.';');
+     $output .= 'var src'.$i.'='.$kml.';';
      return $output ;
  }
 
@@ -233,13 +250,14 @@ function getmymap($i) {
      $output .= 'center: new google.maps.LatLng(0, 0),';
      $output .= 'zoom: 12,';
      $output .= 'scaleControl: true,';
-     //$output .= 'vis'.$i.',';
 	 $output .= 'styles: [{
            featureType: "poi.business",
            elementType: "labels",
-			stylers: [{ visibility:"off",}]
+		   stylers: [{ visibility: vis'.$i.',}]
+			// stylers: [{ visibility:"off",}]
         }],';
-     $output .= 'mapTypeId: "terrain"';
+     $output .= 'mapTypeId: basemap'.$i.'';
+     // $output .= 'mapTypeId: "terrain"';
      $output .= '});';
      $output .= '';
      
