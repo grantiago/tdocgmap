@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- https://www.techfry.com/joomla/joomla-manifest-files-for-extensions removed version="4.1.1" -->
+<extension type="plugin" group="content" method="upgrade" client="site">
+
+	<name>PLG_CONTENT_TDOCMAP_NAME</name>
+	<author>Eur Ing Richard Townsend-Rose</author>
+	<creationDate>09 May 2021</creationDate>
+	<copyright>Copyright (C) 2022 Open Source Matters. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<authorEmail>richard@tdoc.net</authorEmail>
+	<authorUrl>rgtr.tdocplus.co.uk</authorUrl>
+	<version>4.1.2</version>
+      <description>PLG_CONTENT_TDOCMAP_XML_DESCRIPTION</description>
+
+	<files>
+		<filename plugin="tdocgmap">tdocgmap.php</filename>
+	</files>
+
+<!-- xml file that holds the update information -->
+	<updateservers>
+		<server type="extension" name="Plugin TDOC Googlemap Update Site">http://www.tdocplus.co.uk/tdoc_j4_dev/tdoc_gmap/tdocgmap_update.xml</server>
+	</updateservers>	
+
+	
+	<languages folder="language">
+       <language tag="en-GB">en-GB.plg_content_tdocgmap.sys.ini</language> 
+	   <language tag="en-GB">en-GB.plg_content_tdocgmap.ini</language>
+	    <language tag="es-ES">es-ES.plg_content_tdocgmap.sys.ini</language> 
+	   <language tag="es-ES">es-ES.plg_content_tdocgmap.ini</language>
+	   
+	</languages>
+
+
+<!-- Setup the form for the Basic tab -->
+	<config>
+		<fields name="params">
+		<fieldset name="PLG_CONTENT_TDOCMAP_SETTINGS">
+			  <!-- google maps api key -->
+              <!-- joomla 3x -->
+  			  <field type="spacer"  name="mandatory" label="PLG_CONTENT_TDOCMAP_REQUIRED" />
+			  
+              <!-- joomla 4x -->
+			  <!--          
+			  <field type="spacer" name="&lt;div style=&quot;color:#fff; font-size:12px; font-weight:bold; padding:3px; margin:0; text-align:center; background:#333333;&quot;&gt;Settings&lt;/div&gt;" /> 
+			  -->
+			  <field name="apikey" 
+			         type="text"
+					 description="Google Maps API key"
+					 label="Google Maps API key"
+					 size="48"
+			  />
+
+			  <!-- google maps display settings -->
+  			  <field type="spacer"  name="defaults" label="PLG_CONTENT_TDOCMAP_DEFAULT" />
+
+			  <field name="width"  
+			         type="text" 
+					 label="Width"  
+					 default="500" 
+					 description="" 
+					 size="4" 
+			  />
+
+			  <field name="height" 
+			         type="text" 
+					 label="Height" 
+					 default="500" 
+					 description="" 
+					 size="4"  
+			  />
+		</fieldset>
+		<fieldset name="PLG_CONTENT_TDOCMAP_OPTIONS">
+			<field name="poi"
+				type="radio"
+				default="off"
+				description="PLG_CONTENT_TDOCMAP_POI_DESC"
+				label="PLG_CONTENT_TDOCMAP_POI_LABEL">
+					<option value="off">PLG_CONTENT_TDOCMAP_POI_OFF</option>
+					<option value="on">PLG_CONTENT_TDOCMAP_POI_ON</option>
+					<option value="simplified">PLG_CONTENT_TDOCMAP_POI_SIMPLE</option>
+			</field>
+			<field name="basemap" 
+			type="radio" 
+			default="terrain" 
+			description="Which base map?" 
+			label="PLG_CONTENT_TDOCMAP_BASEMAP_LABEL">
+				<option value="terrain">Terrain</option>
+				<option value="satellite">Satellite</option>
+				<option value="roadmap">Roadmap</option>
+				<option value="hybrid">Hybrid</option>
+			</field>
+		</fieldset>
+		
+		</fields>
+	</config>
+
+</extension>
