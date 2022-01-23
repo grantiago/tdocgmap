@@ -26,5 +26,7 @@ I can add the poi styler value to
     
     $mydata[$counter] = getmydata($counter, $gotdata[0], $poi) ; // kml
 	
+    result:
+	
     Array ( [0] => var map0;var vis0=off;var src0='https://lrio.com/kml/hunt.kml'; 
     [1] => var map1;var vis1=off;var src1='https://lrio.com/kml/lax_denpasar.kml'; )
