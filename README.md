@@ -23,6 +23,7 @@ php
     $basemap  = $this->params->get('basemap' ,'');
 	
 I can add the poi styler value to 
+    
     $mydata[$counter] = getmydata($counter, $gotdata[0], $poi) ; // kml
 	
     Array ( [0] => var map0;var vis0=off;var src0='https://lrio.com/kml/hunt.kml'; 
