@@ -1,5 +1,5 @@
 # tdocgmap
-Nice simple plugin that embeds kml files on a google map in joomla content.
+Useful  plugin that embeds kml files on a google map in joomla articles or categories.
 
 _usage_  `{tdocgmap width=700 height=700 kml='https://adomain.com/kml/my.kml'}`
 
@@ -13,4 +13,16 @@ will render multiple maps on one page.
 - I can get the off on variable in the initmap script but it is in the wrong order. and has no effect.
 - Removed the google maps api key in the leftover debugging. 
 
-stuck here 
+additions:
+- added poi params in xml
+- basemap in the xml
+
+php
+
+    $poi  = $this->params->get('poi' ,'');
+    $basemap  = $this->params->get('basemap' ,'');
+	
+I can add the poi styler value to 
+    $mydata[$counter] = getmydata($counter, $gotdata[0], $poi) ; // kml
+	
+	Array ( [0] => var map0;var vis0=off;var src0='https://lrio.com/kml/hunt.kml'; [1] => var map1;var vis1=off;var src1='https://lrio.com/kml/lax_denpasar.kml'; )
