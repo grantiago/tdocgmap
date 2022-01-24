@@ -21,6 +21,8 @@ Specific settings are within the tag:
 - Width
 - URL to the KML file [required] within single 'quotes'.
 - All settings are in the form key=value pairs separated by a space.
+
+Features
 - Auto zoom and center the map on the bounds of the kml layer.
 - Toggle POIs
 - Selectable base map
