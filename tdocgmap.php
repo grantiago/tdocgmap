@@ -8,10 +8,15 @@
 * 4.1.0 added "print" as an option to make a full width map w=100%, h=700 suitable for A4 portrait - 2nd May 2021
 * 4.1.0 added "center", "left", "right" as alignments
 * 4.1.1 changed suppresinfowindows to false - 3rd May 2021
+* 4.1.3 added toggle for POI
+*       radio select for base map
+*       chaged px width to % for responsive
+*       added language file en-GB
+*       added spanish language translation
 **/
 
-/**  
-     Many thanks to Gene from the Google Maps Platform Technical Support team 
+/**
+     Many thanks to Gene from the Google Maps Platform Technical Support team
      // see https://docs.joomla.org/J3.x:Creating_a_Plugin_for_Joomla
      $this->params: the parameters set for this plugin by the administrator - rgtr note: as AN array - got Ok
      $this->_name: the name of the plugin - got Ok
@@ -23,10 +28,10 @@
 /**	 // see https://docs.joomla.org/J3.x:Creating_a_content_plugin
 	 context : The context of the content passed to the plugin.
      article : A reference to the article that is being rendered by the view.
-     params  : A  reference to an associative array of relevant parameters. 
+     params  : A  reference to an associative array of relevant parameters.
 	      The view determines what it considers to be relevant and passes that information along.
-     limitstart : An integer that determines the "page" of the content that is to be generated. 
-	      Note that in the context of views that might not generate HTML output, a page is a 
+     limitstart : An integer that determines the "page" of the content that is to be generated.
+	      Note that in the context of views that might not generate HTML output, a page is a
 		  reasonably abstract concept that depends on the context.
 **/	
 
@@ -39,7 +44,7 @@ class plgcontenttdocgmap extends JPlugin {
     function onContentPrepare($context, &$article, &$params, $limitstart) {
 
 		//step zero - kick everything else out
-    	$name=$this->_name; 
+    	$name=$this->_name;
         //echo "<br>"."Name: ".$name;
 		if ($name !== "tdocgmap"){return true;}
 
@@ -54,8 +59,9 @@ class plgcontenttdocgmap extends JPlugin {
 		$poi  = $this->params->get('poi' ,'');
 		$basemap  = $this->params->get('basemap' ,'');
 		//$poi = 'on'; //testing
-        //echo "<br>Step One - Default Settings: ".$apikey .", ". $height .", ". $width ; 
-		
+		//echo $width;
+        //echo "<br>Step One - Default Settings: ".$apikey .", ". $height .", ". $width ;
+
 		// step two locate number of instances of {tdocgmap}
 		// https://docs.joomla.org/J1.5:Creating_a_content_plugin
 		$content     = $article->text ;
@@ -88,17 +94,17 @@ class plgcontenttdocgmap extends JPlugin {
                 foreach ($arr as $phrase) {
                     if (strstr(strtolower($phrase), 'kml=')) {
                         $tpm = explode('=', $phrase);
-                        $gotdata[0]=$tpm[1];						
+                        $gotdata[0]=$tpm[1];
                     }
                     if (strstr(strtolower($phrase), 'height=')) {
                         $tpm = explode('=', $phrase);
-                        $gotdata[1]=$tpm[1]; 
+                        $gotdata[1]=$tpm[1];
                     }
                     if (strstr(strtolower($phrase), 'width=')) {
                         $tpm = explode('=', $phrase);
-                        $gotdata[2]=$tpm[1];                    
+                        $gotdata[2]=$tpm[1];
                     }
-                    // 4.1.0 
+                    // 4.1.0
                     if ($phrase =='left') {
                         $gotdata[3]="left" ;
                     } elseif ($phrase =='right') {
@@ -107,51 +113,50 @@ class plgcontenttdocgmap extends JPlugin {
                         $gotdata[3]="print" ;
                     }
 
-                }   // end for each data   
+                }   // end for each data
 
                 // check if height & width were set, if not use defaults, no kml or lat or long - zappo !
-                if (empty($gotdata[0])){return true ; }              // kml
+                if (empty($gotdata[0])){return true ; } // kml
                 if (empty($gotdata[1])){$gotdata[1] = $height ;}
                 if (empty($gotdata[2])){$gotdata[2] = $width ; }
 
-                // three things for each in the body: div with style, map data, and creator for script 
+                // three things for each in the body: div with style, map data, and creator for script
                 // create divs // 4.1.0
-                
 				$mydivs[$counter] = getmydiv($counter, $gotdata[1], $gotdata[2], $gotdata[3]) ;   // mapno, height, width, ifprint
-                // create data  
+                // create data
 				/*=====added poi & basemap var ga see function line 215===========*/
-               echo $mydata[$counter] = getmydata($counter, $poi, $basemap, $gotdata[0]) ; // map#, poi, kml 
+               echo $mydata[$counter] = getmydata($counter, $poi, $basemap, $gotdata[0]) ; // map#, poi, kml
 				
 				 // echo getpbkml($counter, $poi, $basemap, $gotdata[0]);
-                // create maps  
-                $mymaps[$counter] = getmymap($counter) ;                            
+                // create maps
+                $mymaps[$counter] = getmymap($counter) ;
 
-                $counter = $counter + 1 ;             
+                $counter = $counter + 1 ;
             }  // end for each occurrence
 // var_dump($poi);
 //getmystyle($poi);
  //print_r($mydata); // Array ( [0] => var map0;var src0='https://lrio.com/kml/hunt.kml'; [1] => var map1;var src1='https://lrio.com/kml/hunt.kml'; )
-			// Replace tag occurences with divs. 
+			// Replace tag occurences with divs.
             for ($i = 0; $i < count($mydivs); $i++) {
                 $article->text = preg_replace($regex, $mydivs[$i], $article->text, 1);
             } // end for replace tags with maps
 
             // assemble maps script
-            $mapscript  ='' ;
+            $mapscript  ='';
             // add header
             $mapscript .='<script>' ;
             $mapscript .='function initMaps() { ';
             //parse mymaps
-        $mapscript . '};</script>';   
+        $mapscript . '};</script>';
             // data stuff
-            for ($i = 0; $i < count($mydata); $i++) {  
+            for ($i = 0; $i < count($mydata); $i++) {
                 // add data
-                $mapscript .= $mydata[$i];         
+                $mapscript .= $mydata[$i];
             }   // end each data
             // map stuff
-            for ($i = 0; $i < count($mymaps); $i++) {  
+            for ($i = 0; $i < count($mymaps); $i++) {
                 // add map
-                $mapscript .= $mymaps[$i];         
+                $mapscript .= $mymaps[$i];
             }   // end each map
 
 			
@@ -161,13 +166,13 @@ class plgcontenttdocgmap extends JPlugin {
 // there are two options - script in head, or script in body - one or the other !
 // script in text - FAILS in J3 and in J4
 //            $document = JFactory::getDocument();
-//            $document->addscript($mapscript); 
+//            $document->addscript($mapscript);
 // script in body
             $article->text .= $mapscript ;
 
             // Get authority
             $myauth = getmyauth($apikey) ;
-            // see https://joomla.stackexchange.com/questions/4035/add-javascript-with-doc-addscript-with-async-true 
+            // see https://joomla.stackexchange.com/questions/4035/add-javascript-with-doc-addscript-with-async-true
             // $document->addscript($myauth, 'text/javascript', false, true); // script, type, defer, async.
             $article->text .= $myauth ;
         } // end found
@@ -178,33 +183,35 @@ class plgcontenttdocgmap extends JPlugin {
 } // end plgcontenttdocgmap class
 
 // these are the functions that are called above.
-// below each is the code from https://codebeautify.org/html-to-php-converter 
+// below each is the code from https://codebeautify.org/html-to-php-converter
 
-// set up the divs to hold the maps, used in the tag replacement in the article. 
+// set up the divs to hold the maps, used in the tag replacement in the article.
 function getmydiv($i, $h, $w, $xx) {
-    // 4.1.0   
+    // 4.1.0
 //    echo "<br>Opt:".$xx.":" ;
     if($xx=="print") {
-        $output = '<div id="Map'.$i.'" style="width:100%;     height:700px;                               border: thin solid #333;">'.$i.'</div>' ;     
+        $output = '<div id="Map'.$i.'" style="width:100%;     height:700px;                               border: thin solid #333;">'.$i.'</div>' ;
     } elseif($xx=="left") {
-        $output = '<div id="Map'.$i.'" style="width:'.$w.'px; height:'.$h.'px; float:left;  margin: 15px; border: thin solid #333;">'.$i.'</div>' ;
+        $output = '<div id="Map'.$i.'" style="width:'.$w.'%; height:'.$h.'px; float:left;  margin: 15px; border: thin solid #333;">'.$i.'</div>' ;
     } elseif($xx=="right") {
-        $output = '<div id="Map'.$i.'" style="width:'.$w.'px; height:'.$h.'px; float:right; margin: 15px; border: thin solid #333;">'.$i.'</div>' ;
+        $output = '<div id="Map'.$i.'" style="width:'.$w.'%; height:'.$h.'px; float:right; margin: 15px; border: thin solid #333;">'.$i.'</div>' ;
     } else {
-        $output = '<div id="Map'.$i.'" style="width:'.$w.'px; height:'.$h.'px; margin:auto;               border: thin solid #333;">'.$i.'</div>' ;
+// need some mobile styling
+        $output = '<div id="Map'.$i.'" style="width:'.$w.'%; height:'.$h.'px; margin:auto; border: thin solid #333;">'.$i.'</div>' ;
+       // $output = '<div id="Map'.$i.'" style="width:'.$w.'px; height:'.$h.'px; margin:auto; border: thin solid #333;">'.$i.'</div>' ;
     }
 /**
 margin: auto; centers no wrap
 float:left; left with wrap on right, etc
-**/    
-    
+**/
+
 return $output ;
 }
 /**
 echo '<div id="Map1" style="width: 500px; height: 500px;">1</div>';
-**/ 
+**/
 
-// define the var to hold a map, and the kml file to show. goes in the map script before init function. 
+// define the var to hold a map, and the kml file to show. goes in the map script before init function.
 function getmydata($i, $poi, $basemap, $kml) {
      $output  = 'var map'.$i.';';
      $output .= 'var vis'.$i.'='.json_encode($poi).';'; // json_ puts quotes around the values!!!!
@@ -212,7 +219,7 @@ function getmydata($i, $poi, $basemap, $kml) {
      $output .= 'var src'.$i.'='.$kml.';';
      return $output ;
 }
-//test function 
+//test function
 function getpbkml($i, $poi, $basemap, $kml) {
      $output  = 'var map'.$i.';';
      $output .= 'var vis'.$i.'='.json_encode($poi).';';
@@ -244,7 +251,7 @@ echo 'var map1;';
 echo 'var src1 = 'http://tdocplus.co.uk/lp_routes/lp_snuff_white_east_2.kml';';
 **/
 
-// create the stuff to go within the map scipt''s init function. change ' to " for element id, terrain 
+// create the stuff to go within the map scipt''s init function. change ' to " for element id, terrain
 function getmymap($i) {
      $output  = 'map'.$i.' = new google.maps.Map(document.getElementById("Map'.$i.'"), {' ;
      $output .= 'center: new google.maps.LatLng(0, 0),';
@@ -258,9 +265,11 @@ function getmymap($i) {
         }],';
      $output .= 'mapTypeId: basemap'.$i.'';
      // $output .= 'mapTypeId: "terrain"';
+	
+    
      $output .= '});';
-     $output .= '';
      
+
      $output .= 'var kmlLayer'.$i.' = new google.maps.KmlLayer(src'.$i.', {';
      $output .= 'suppressInfoWindows: false,';
      $output .= 'preserveViewport: false,';
@@ -283,8 +292,8 @@ echo 'map: map1';
 echo '});';
 **/
 
-// script for authorisation and callback to map script 
-function getmyauth($apikey) {                
+// script for authorisation and callback to map script
+function getmyauth($apikey) {
     $output = '<script src="https://maps.googleapis.com/maps/api/js?key='.$apikey.'&callback=initMaps"></script>' ;
     return $output ;
 }
@@ -293,6 +302,6 @@ function getmyauth($apikey) {
 /**
     echo '<script';
     echo 'src="https://maps.googleapis.com/maps/api/js?key=&amp;callback=initMaps">';
-    echo '</script>'; 
+    echo '</script>';
 **/
-?> 
+?>

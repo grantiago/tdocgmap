@@ -24,11 +24,10 @@
 
 	
 	<languages folder="language">
-       <language tag="en-GB">en-GB.plg_content_tdocgmap.sys.ini</language> 
+       <language tag="en-GB">en-GB.plg_content_tdocgmap.sys.ini</language>
 	   <language tag="en-GB">en-GB.plg_content_tdocgmap.ini</language>
-	   
+	
 	</languages>
-
 
 <!-- Setup the form for the Basic tab -->
 	<config>
@@ -37,7 +36,7 @@
 			  <!-- google maps api key -->
               <!-- joomla 3x -->
 			  <field type="spacer" name="usage" label="PLG_CONTENT_TDOCMAP_USAGE" />
-			  <field name="apikey" 
+			  <field name="apikey"
 			         type="text"
 					 description="PLG_CONTENT_TDOCMAP_APIKEY_DESC"
 					 label="PLG_CONTENT_TDOCMAP_APIKEY"
@@ -45,20 +44,20 @@
 			  />
 
 			  <!-- google maps display settings -->
-			  <field name="width"  
-			         type="text" 
-					 label="PLG_CONTENT_TDOCMAP_WIDTH"  
-					 default="500" 
-					 description="PLG_CONTENT_TDOCMAP_WIDTH_DESC" 
+			  <field name="width"
+			         type="text"
+					 label="PLG_CONTENT_TDOCMAP_WIDTH"
+					 default="100"
+					 description="PLG_CONTENT_TDOCMAP_WIDTH_DESC"
 					 size="4"
 					 />
 
-			  <field name="height" 
-			         type="text" 
-					 label="Default height" 
-					 default="500" 
-					 description="" 
-					 size="4"  
+			  <field name="height"
+			         type="text"
+					 label="PLG_CONTENT_TDOCMAP_HEIGHT"
+					 default="500"
+					 description="PLG_CONTENT_TDOCMAP_HEIGHT_DESC"
+					 size="4"
 			  />
 		
 			<field name="poi"
@@ -70,10 +69,10 @@
 					<option value="on">PLG_CONTENT_TDOCMAP_POI_ON</option>
 					<option value="simplified">PLG_CONTENT_TDOCMAP_POI_SIMPLE</option>
 			</field>
-			<field name="basemap" 
-			type="radio" 
-			default="terrain" 
-			description="Which base map?" 
+			<field name="basemap"
+			type="radio"
+			default="terrain"
+			description="Which base map?"
 			label="PLG_CONTENT_TDOCMAP_BASEMAP_LABEL">
 				<option value="terrain">Terrain</option>
 				<option value="satellite">Satellite</option>
