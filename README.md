@@ -13,11 +13,11 @@ It took me most of a day to work through the changes. I'm a one-line cut-and-pas
 
 I am offering these mods to the original developer and you. I hope my efforts and added features are appreciated. I feel as if I am trespassing a bit. Oh well.
 
-_usage_ `{tdocgmap width=700 height=700 kml='https://adomain.com/kml/my.kml'}`
+_usage_ `{tdocgmap width=100 height=700 kml='https://adomain.com/kml/my.kml'}`
 
 Specific settings are within the tag:
 - Position [left, right, none]
-- Height
+- Height -- now in % for responsive.
 - Width
 - URL to the KML file [required] within single 'quotes'.
 - All settings are in the form key=value pairs separated by a space.
@@ -56,7 +56,8 @@ Tasks related to new content.
   - [ ] add an optional marker and info window?
   - [ ] add a default kml file so the plugin doesn't fail if omitted in the call.
   - [ ] the Spanish translations lag a few lines. 
-
+  - [ ] Some css needs to be added to make it responsive
+  - [ ] Probably gonna need top and bottom margin toggles at some point. 
 ## Release
 - [ ] contact the original devloper.
 - [x] Init project repository
